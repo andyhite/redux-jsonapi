@@ -16,6 +16,16 @@ function ServerError(response, errors = new Immutable.List) {
   this.errors = errors;
 }
 
+function objectToQueryString(object) {
+  const parts = [];
+
+  Object.keys(object).forEach((key) => {
+    parts.push(`${encodeURIComponent(key)}=${encodeURIComponent(object[key])}`);
+  });
+
+  return parts.join('&');
+}
+
 function resourceURL(resource, query) {
   const parts = [`${window.API_HOST}`];
 
@@ -24,18 +34,6 @@ function resourceURL(resource, query) {
   if (query) parts.push(`?${objectToQueryString(query)}`);
 
   return parts.join('');
-}
-
-function objectToQueryString(object) {
-  const parts = [];
-
-  for (const i in object) {
-    if (object.hasOwnProperty(i)) {
-      parts.push(`${encodeURIComponent(i)}=${encodeURIComponent(object[i])}`);
-    }
-  }
-
-  return parts.join('&');
 }
 
 function handleResponse(response) {
@@ -64,7 +62,7 @@ function serializeData(data) {
   if (data) {
     if (Array.isArray(data)) {
       return data.map((resource) => {
-        if (resource._type) {
+        if (resource._type) { // eslint-disable-line no-underscore-dangle
           return api.serializeResource(resource);
         }
 
@@ -72,7 +70,7 @@ function serializeData(data) {
       });
     }
 
-    if (data._type) {
+    if (data._type) { // eslint-disable-line no-underscore-dangle
       return api.serializeResource(data);
     }
   }
