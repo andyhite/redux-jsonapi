@@ -2,7 +2,7 @@ import Immutable from 'immutable';
 import * as actionTypes from './actionTypes';
 
 function loadingResource(state, resource) {
-  return state.setIn(['meta', resource.type, 'isLoading'], true);
+  return state.setIn(['meta', resource.get('type'), 'isLoading'], true);
 }
 
 function loadResource(state, resource) {
@@ -25,6 +25,10 @@ function unloadResource(state, resource) {
     setIn(['meta', resource.get('type'), 'isLoading'], false);
 }
 
+function replaceResource(state, resource) {
+  return loadResource(state, resource);
+}
+
 export default function resourceReducer(state = new Immutable.Map, action) {
   switch (action.type) {
     case actionTypes.LOADING:
@@ -33,6 +37,8 @@ export default function resourceReducer(state = new Immutable.Map, action) {
       return loadResource(state, Immutable.fromJS(action.data));
     case actionTypes.UNLOAD:
       return unloadResource(state, Immutable.fromJS(action.data));
+    case actionTypes.REPLACE:
+      return replaceResource(state, Immutable.fromJS(action.data));
     default:
       return state;
   }

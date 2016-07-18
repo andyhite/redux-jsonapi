@@ -1,4 +1,9 @@
+import Immutable from 'immutable';
 import humps from 'humps';
+
+export function getMeta(resourceType, state) {
+  return state.getIn(['meta', resourceType], new Immutable.Map).toJS();
+}
 
 export function getResources(resourceType, state) {
   if (!state || !state.hasIn(['resources', resourceType])) return [];
@@ -23,12 +28,13 @@ export function deserializeResources(resources, state) {
 }
 
 export function deserializeRelationship(resource, state) {
+  if (!resource) return null;
   return getResource(resource.type, resource.id, state);
 }
 
 export function deserializeResource(resource, state) {
   const deserializedResource = {};
-  const { id, type, attributes, relationships } = resource;
+  const { id, type, attributes, relationships, meta } = resource;
 
   if (id) deserializedResource.id = id;
   deserializedResource._type = type;
@@ -51,36 +57,51 @@ export function deserializeResource(resource, state) {
     });
   }
 
+  if (meta) {
+    deserializedResource._meta = meta;
+  }
+
   return deserializedResource;
 }
 
-export function serializeRelationship(relationship) {
-  const { id, _type: type } = relationship;
-
-  return {
-    data: { id, type },
-  };
+export function serializeRelationship(resource) {
+  if (!resource) return null;
+  const { id, _type: type } = resource;
+  return { id, type };
 }
 
 export function serializeResource(resource) {
   const serializedResource = {};
-  const { id, _type: type, ...otherAttributes } = resource;
+  const { id, _type: type, _meta: meta, ...otherAttributes } = resource;
 
-  serializedResource.id = id;
+  if (id) {
+    serializedResource.id = id;
+  }
+
   serializedResource.type = type;
   serializedResource.attributes = {};
   serializedResource.relationships = {};
+
+  if (meta) {
+    serializedResource.meta = meta;
+  }
 
   Object.keys(otherAttributes).forEach((key) => {
     if (typeof otherAttributes[key] === 'function') {
       const data = otherAttributes[key].call();
 
-      if (Array.isArray(data)) {
-        serializedResource.relationships[humps.decamelize(key)] = data.map((relationship) => {
-          return serializeRelationship(relationship);
-        });
-      } else {
-        serializedResource.relationships[humps.decamelize(key)] = serializeRelationship(data);
+      if (data) {
+        if (Array.isArray(data)) {
+          serializedResource.relationships[humps.decamelize(key)] = {
+            data: data.map((relationship) => {
+              return serializeRelationship(relationship);
+            }),
+          };
+        } else {
+          serializedResource.relationships[humps.decamelize(key)] = {
+            data: serializeRelationship(data),
+          };
+        }
       }
     } else {
       serializedResource.attributes[humps.decamelize(key)] = otherAttributes[key];
