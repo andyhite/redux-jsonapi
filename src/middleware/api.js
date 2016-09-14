@@ -8,6 +8,10 @@ function getDefaultHeaders() {
   };
 }
 
+function serialize(resource) {
+  return JSON.stringify(resource);
+}
+
 function handleErrors(response) {
   if (!response.ok) {
     const error = new Error(response.statusText);
