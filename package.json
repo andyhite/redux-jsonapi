@@ -2,7 +2,7 @@
   "name": "redux-jsonapi",
   "description": "Redux reducer, actions, and serializers for JSON:API",
   "homepage": "https://github.com/andhite/redux-jsonapi#readme",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "main": "dist/index.js",
   "author": {
     "name": "Andrew Hite"
