@@ -15,24 +15,24 @@ const request = (method, payload = {}, meta = {}) => {
   };
 };
 
-export const get = (resource, { params = {}, headers = {}, meta = {} }) => {
-  return request(GET, { resource, params, headers }, meta);
+export const get = (resource, { meta, ...payload }) => {
+  return request(GET, { ...payload, resource }, meta);
 };
 
-export const post = (resource, { params = {}, headers = {}, meta = {} }) => {
-  return request(POST, { resource, params, headers }, meta);
+export const post = (resource, { meta, ...payload }) => {
+  return request(POST, { ...payload, resource }, meta);
 };
 
-export const put = (resource, { params = {}, headers = {}, meta = {} }) => {
-  return request(PUT, { resource, params, headers }, meta);
+export const put = (resource, { meta, ...payload }) => {
+  return request(PUT, { ...payload, resource }, meta);
 };
 
-export const patch = (resource, { params = {}, headers = {}, meta = {} }) => {
-  return request(PATCH, { resource, params, headers }, meta);
+export const patch = (resource, { meta, ...payload }) => {
+  return request(PATCH, { ...payload, resource }, meta);
 };
 
-export const del = (resource, { params = {}, headers = {}, meta = {} }) => {
-  return request(DELETE, { resource, params, headers }, meta);
+export const del = (resource, { meta, ...payload }) => {
+  return request(DELETE, { ...payload, resource }, meta);
 };
 
 export const receive = (resources) => {
