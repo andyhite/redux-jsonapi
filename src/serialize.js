@@ -1,15 +1,15 @@
 import { decamelize } from 'humps';
 
-function relationships(resources = []) {
-  return resources.map((resource) => relationship(resource));
+function serializeRelationships(resources = []) {
+  return resources.map((resource) => serializeRelationship(resource));
 }
 
-function relationship({ id, _type } = {}) {
-  return { id: type: _type };
+function serializeRelationship({ id, _type } = {}) {
+  return { id, type: _type };
 }
 
 function serialize({ id, _type, _meta, ...otherAttributes }) {
-  const resource = {};
+  let resource = {};
 
   if (id) resource = { ...resource, id };
   resource = { ...resource, type: _type }
@@ -25,7 +25,7 @@ function serialize({ id, _type, _meta, ...otherAttributes }) {
             relationships: {
               ...resource.relationships,
               [decamelize(key)]: {
-                data: relationships(data),
+                data: serializeRelationships(data),
               },
             },
           };
@@ -36,7 +36,7 @@ function serialize({ id, _type, _meta, ...otherAttributes }) {
           relationships: {
             ...resource.relationships,
             [decamelize(key)]: {
-              data: relationship(data),
+              data: serializeRelationship(data),
             },
           },
         };

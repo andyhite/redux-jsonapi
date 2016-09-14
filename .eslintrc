@@ -1,7 +1,3 @@
 {
-  "parser": "babel-eslint",
-  "extends": "airbnb",
-  "plugins": [
-    "react"
-  ]
+  "extends": "./node_modules/react-scripts/config/eslint.js"
 }

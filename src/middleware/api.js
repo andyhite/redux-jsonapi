@@ -24,7 +24,7 @@ function handleResponse(response) {
       resources: [data, ...included],
       result: Array.isArray(data) ? data.map((r) => r.id) : data.id,
       meta,
-    },
+    };
   });
 }
 

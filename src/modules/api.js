@@ -9,7 +9,7 @@ export const request = (method, payload = {}) => {
   return {
     type: method,
     payload,
-  },
+  };
 };
 
 export const get = (resource, params = {}, headers = {}) => {
