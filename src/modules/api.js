@@ -15,23 +15,23 @@ const request = (method, payload = {}, meta = {}) => {
   };
 };
 
-export const get = (resource, { meta, ...payload }) => {
+export const get = (resource, { meta, ...payload } = {}) => {
   return request(GET, { ...payload, resource }, meta);
 };
 
-export const post = (resource, { meta, ...payload }) => {
+export const post = (resource, { meta, ...payload } = {}) => {
   return request(POST, { ...payload, resource }, meta);
 };
 
-export const put = (resource, { meta, ...payload }) => {
+export const put = (resource, { meta, ...payload } = {}) => {
   return request(PUT, { ...payload, resource }, meta);
 };
 
-export const patch = (resource, { meta, ...payload }) => {
+export const patch = (resource, { meta, ...payload } = {}) => {
   return request(PATCH, { ...payload, resource }, meta);
 };
 
-export const del = (resource, { meta, ...payload }) => {
+export const del = (resource, { meta, ...payload } = {}) => {
   return request(DELETE, { ...payload, resource }, meta);
 };
 
