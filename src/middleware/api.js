@@ -36,9 +36,9 @@ function createMiddleware(host, defaultHeaders = getDefaultHeaders()) {
   const getURL = (resource, params) => {
     let urlParts = [host];
 
-    if (resource.type) urlParts = [urlParts, '/', resource.type];
-    if (resource.id) urlParts = [urlParts, '/', resource.id];
-    if (params) urlParts = [urlParts, '?', queryString.stringify(params)];
+    if (resource.type) urlParts = [...urlParts, '/', resource.type];
+    if (resource.id) urlParts = [...urlParts, '/', resource.id];
+    if (params) urlParts = [...urlParts, '?', queryString.stringify(params)];
 
     return urlParts.join('');
   };
