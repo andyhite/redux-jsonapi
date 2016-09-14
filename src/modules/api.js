@@ -1,3 +1,5 @@
+import { camelize } from 'humps';
+
 export const RECEIVE = '@@redux-jsonapi/RECEIVE';
 export const GET = '@@redux-jsonapi/GET';
 export const POST = '@@redux-jsonapi/POST';
@@ -46,12 +48,12 @@ function getInitialState() {
 }
 
 function receiveReducer(state, { resources }) {
-  return resources.reduce((nextState, entity) => {
+  return resources.reduce((nextState, resource) => {
     return {
       ...nextState,
-      [entity.type]: {
-        ...nextState[entity.type],
-        [entity.id]: entity,
+      [camelize(resource.type)]: {
+        ...nextState[camelize(resource.type)],
+        [resource.id]: resource,
       },
     };
   }, state);
