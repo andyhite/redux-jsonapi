@@ -15,7 +15,6 @@
     "url": "https://github.com/andyhite/redux-jsonapi/issues"
   },
   "dependencies": {
-    "es6-promise": "^3.2.1",
     "humps": "^1.1.0",
     "qs": "^6.2.1"
   },
