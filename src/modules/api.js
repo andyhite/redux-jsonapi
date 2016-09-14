@@ -7,31 +7,32 @@ export const PUT = '@@redux-jsonapi/PUT';
 export const PATCH = '@@redux-jsonapi/PATCH';
 export const DELETE = '@@redux-jsonapi/DELETE';
 
-const request = (method, payload = {}) => {
+const request = (method, payload = {}, meta = {}) => {
   return {
     type: method,
     payload,
+    meta,
   };
 };
 
-export const get = (resource, params = {}, headers = {}) => {
-  return request(GET, { resource, params, headers });
+export const get = (resource, { params = {}, headers = {}, meta = {} }) => {
+  return request(GET, { resource, params, headers }, meta);
 };
 
-export const post = (resource, params = {}, headers = {}) => {
-  return request(POST, { resource, params, headers });
+export const post = (resource, { params = {}, headers = {}, meta = {} }) => {
+  return request(POST, { resource, params, headers }, meta);
 };
 
-export const put = (resource, params = {}, headers = {}) => {
-  return request(PUT, { resource, params, headers });
+export const put = (resource, { params = {}, headers = {}, meta = {} }) => {
+  return request(PUT, { resource, params, headers }, meta);
 };
 
-export const patch = (resource, params = {}, headers = {}) => {
-  return request(PATCH, { resource, params, headers });
+export const patch = (resource, { params = {}, headers = {}, meta = {} }) => {
+  return request(PATCH, { resource, params, headers }, meta);
 };
 
-export const del = (resource, params = {}, headers = {}) => {
-  return request(DELETE, { resource, params, headers });
+export const del = (resource, { params = {}, headers = {}, meta = {} }) => {
+  return request(DELETE, { resource, params, headers }, meta);
 };
 
 export const receive = (resources) => {

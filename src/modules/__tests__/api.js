@@ -5,68 +5,74 @@ describe('API module', () => {
     const resource = { type: 'widgets' };
     const params = { foo: 'bar' };
     const headers = { lorem: 'ipsum' };
+    const meta = { auth: true };
 
     describe('get', () => {
       it('creates an GET request', () => {
-        expect(actions.get(resource, params, headers)).toEqual({
+        expect(actions.get(resource, { params, headers, meta })).toEqual({
           type: actions.GET,
           payload: {
             resource,
             params,
             headers,
           },
+          meta,
         });
       });
     });
 
     describe('post', () => {
       it('creates a POST request', () => {
-        expect(actions.post(resource, params, headers)).toEqual({
+        expect(actions.post(resource, { params, headers, meta })).toEqual({
           type: actions.POST,
           payload: {
             resource,
             params,
             headers,
           },
+          meta,
         });
       });
     });
 
     describe('put', () => {
       it('creates a PUT request', () => {
-        expect(actions.put(resource, params, headers)).toEqual({
+        expect(actions.put(resource, { params, headers, meta })).toEqual({
           type: actions.PUT,
           payload: {
             resource,
             params,
             headers,
           },
+          meta,
         });
       });
     });
 
     describe('patch', () => {
       it('creates a PATCH request', () => {
-        expect(actions.patch(resource, params, headers)).toEqual({
+        expect(actions.patch(resource, { params, headers, meta })).toEqual({
           type: actions.PATCH,
           payload: {
             resource,
             params,
             headers,
           },
+          meta,
         });
       });
     });
 
     describe('del', () => {
       it('creates a DELETE request', () => {
-        expect(actions.del(resource, params, headers)).toEqual({
+        expect(actions.del(resource, { params, headers, meta })).toEqual({
           type: actions.DELETE,
           payload: {
             resource,
             params,
             headers,
           },
+          meta,
         });
       });
     });
