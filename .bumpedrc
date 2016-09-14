@@ -34,6 +34,6 @@ plugins:
       plugin: 'bumped-terminal'
       command: 'git tag $newVersion && git push origin master && git push --tags'
 
-    'Publishing at GemFury':
+    'Publishing at NPM':
       plugin: 'bumped-terminal'
       command: 'npm publish'
