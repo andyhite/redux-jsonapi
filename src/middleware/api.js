@@ -26,7 +26,7 @@ function handleErrors(response) {
 function handleResponse(response) {
   return response.json().then(({ data, included = [], meta = {} }) => {
     return {
-      resources: [data, ...included],
+      resources: [...(Array.isArray(data) ? data : [data]), ...included],
       result: Array.isArray(data) ? data.map((r) => r.id) : data.id,
       meta,
     };
@@ -75,7 +75,7 @@ function createMiddleware(host, defaultHeaders = getDefaultHeaders()) {
 
       return requestActions[action.type](action.payload).then((data) => {
         store.dispatch(apiActions.receive(data.resources));
-        return result;
+        return data;
       });
     }
 

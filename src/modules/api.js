@@ -5,7 +5,7 @@ export const PUT = '@@redux-jsonapi/PUT';
 export const PATCH = '@@redux-jsonapi/PATCH';
 export const DELETE = '@@redux-jsonapi/DELETE';
 
-export const request = (method, payload = {}) => {
+const request = (method, payload = {}) => {
   return {
     type: method,
     payload,
