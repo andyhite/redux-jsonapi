@@ -24,7 +24,7 @@ function handleErrors(response) {
 }
 
 function handleResponse(response) {
-  return response.json().then(({ data, included, meta }) => {
+  return response.json().then(({ data, included = [], meta = {} }) => {
     return {
       resources: [data, ...included],
       result: Array.isArray(data) ? data.map((r) => r.id) : data.id,
