@@ -1,3 +1,11 @@
+<a name="0.0.2"></a>
+## 0.0.2 (2016-09-14)
+
+* Add prerelease warning to readme ([4b65937](https://github.com/andyhite/redux-jsonapi/commit/4b65937))
+* Release 0.0.2 ([3c7f178](https://github.com/andyhite/redux-jsonapi/commit/3c7f178))
+
+
+
 <a name="0.0.0"></a>
 # 0.0.0 (2016-09-14)
 
