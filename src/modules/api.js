@@ -41,31 +41,29 @@ export const receive = (resources) => {
   };
 };
 
-const createReducer = () => {
-  function getInitialState() {
-    return {};
-  }
+function getInitialState() {
+  return {};
+}
 
-  function receiveReducer(state, { resources }) {
-    return resources.reduce((nextState, entity) => {
-      return {
-        ...nextState,
-        [entity.type]: {
-          ...nextState[entity.type],
-          [entity.id]: entity,
-        },
-      };
-    }, state);
-  }
+function receiveReducer(state, { resources }) {
+  return resources.reduce((nextState, entity) => {
+    return {
+      ...nextState,
+      [entity.type]: {
+        ...nextState[entity.type],
+        [entity.id]: entity,
+      },
+    };
+  }, state);
+}
 
-  function reducer(state = getInitialState(), { type, payload }) {
-    switch(type) {
-      case RECEIVE:
-        return receiveReducer(state, payload);
-      default:
-        return state;
-    }
+function reducer(state = getInitialState(), { type, payload }) {
+  switch(type) {
+    case RECEIVE:
+      return receiveReducer(state, payload);
+    default:
+      return state;
   }
-};
+}
 
-export default createReducer;
+export default reducer;
