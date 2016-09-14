@@ -36,7 +36,7 @@ function createMiddleware(host, defaultHeaders = getDefaultHeaders()) {
     if (resource.id) urlParts = [urlParts, '/', resource.id];
     if (params) urlParts = [urlParts, '?', queryString.stringify(params)];
 
-    return parts.join('');
+    return urlParts.join('');
   };
 
   const requestAction = (method, { resource, params, headers }) => {
