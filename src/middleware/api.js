@@ -1,4 +1,5 @@
 import queryString from 'qs';
+import { decamelize } from 'humps';
 import * as apiActions from '../modules/api';
 
 function getDefaultHeaders() {
@@ -36,7 +37,7 @@ function createMiddleware(host, defaultHeaders = getDefaultHeaders()) {
   const getURL = (resource, params) => {
     let urlParts = [host];
 
-    if (resource.type) urlParts = [...urlParts, '/', resource.type];
+    if (resource.type) urlParts = [...urlParts, '/', decamelize(resource.type)];
     if (resource.id) urlParts = [...urlParts, '/', resource.id];
     if (params) urlParts = [...urlParts, '?', queryString.stringify(params)];
 
