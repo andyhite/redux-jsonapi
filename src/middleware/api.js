@@ -49,7 +49,7 @@ function createMiddleware(host, defaultHeaders = getDefaultHeaders()) {
 
     return fetch(url, {
       method,
-      body: method !== 'GET' ? serialize(resource) : undefined,
+      body: method !== 'GET' ? serialize({ data: resource }) : undefined,
       headers: {
         ...defaultHeaders,
         ...headers,
