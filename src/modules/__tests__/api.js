@@ -1,4 +1,5 @@
 import reducer, * as actions from '../api';
+import serialize from '../../serialize';
 
 describe('API module', () => {
   describe('Action Creators', () => {
@@ -12,9 +13,9 @@ describe('API module', () => {
         expect(actions.get(resource, { params, headers, meta })).toEqual({
           type: actions.GET,
           payload: {
-            resource,
             params,
             headers,
+            resource: serialize(resource),
           },
           meta,
         });
@@ -26,9 +27,9 @@ describe('API module', () => {
         expect(actions.post(resource, { params, headers, meta })).toEqual({
           type: actions.POST,
           payload: {
-            resource,
             params,
             headers,
+            resource: serialize(resource),
           },
           meta,
         });
@@ -40,9 +41,9 @@ describe('API module', () => {
         expect(actions.put(resource, { params, headers, meta })).toEqual({
           type: actions.PUT,
           payload: {
-            resource,
             params,
             headers,
+            resource: serialize(resource),
           },
           meta,
         });
@@ -54,9 +55,9 @@ describe('API module', () => {
         expect(actions.patch(resource, { params, headers, meta })).toEqual({
           type: actions.PATCH,
           payload: {
-            resource,
             params,
             headers,
+            resource: serialize(resource),
           },
           meta,
         });
@@ -68,9 +69,9 @@ describe('API module', () => {
         expect(actions.del(resource, { params, headers, meta })).toEqual({
           type: actions.DELETE,
           payload: {
-            resource,
             params,
             headers,
+            resource: serialize(resource),
           },
           meta,
         });

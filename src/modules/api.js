@@ -1,4 +1,5 @@
 import { camelize } from 'humps';
+import serialize from '../serialize';
 
 export const RECEIVE = '@@redux-jsonapi/RECEIVE';
 export const GET = '@@redux-jsonapi/GET';
@@ -16,23 +17,23 @@ const request = (method, payload = {}, meta = {}) => {
 };
 
 export const get = (resource, { meta, ...payload } = {}) => {
-  return request(GET, { ...payload, resource }, meta);
+  return request(GET, { ...payload, resource: serialize(resource) }, meta);
 };
 
 export const post = (resource, { meta, ...payload } = {}) => {
-  return request(POST, { ...payload, resource }, meta);
+  return request(POST, { ...payload, resource: serialize(resource) }, meta);
 };
 
 export const put = (resource, { meta, ...payload } = {}) => {
-  return request(PUT, { ...payload, resource }, meta);
+  return request(PUT, { ...payload, resource: serialize(resource) }, meta);
 };
 
 export const patch = (resource, { meta, ...payload } = {}) => {
-  return request(PATCH, { ...payload, resource }, meta);
+  return request(PATCH, { ...payload, resource: serialize(resource) }, meta);
 };
 
 export const del = (resource, { meta, ...payload } = {}) => {
-  return request(DELETE, { ...payload, resource }, meta);
+  return request(DELETE, { ...payload, resource: serialize(resource) }, meta);
 };
 
 export const receive = (resources) => {
