@@ -1,7 +1,9 @@
 import { camelize } from 'humps';
 
 function deserializeRelationships(resources = [], store) {
-  return resources.map((resource) => deserializeRelationship(resource, store));
+  return resources
+    .map((resource) => deserializeRelationship(resource, store))
+    .filter((resource) => !!resource);
 }
 
 function deserializeRelationship(resource = {}, store) {

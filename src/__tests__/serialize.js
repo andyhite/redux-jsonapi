@@ -14,6 +14,9 @@ describe('Serialize', () => {
     doodad: () => {
       return { id: 1, _type: 'doodads', name: 'Doodad #1' };
     },
+    somethingNull: () => {
+      return null;
+    },
   };
 
   it('sets the resource ID', () => {
@@ -35,5 +38,6 @@ describe('Serialize', () => {
     expect(serialize(serializedResource).relationships.gadgets.data[1].type).toEqual('gadgets');
     expect(serialize(serializedResource).relationships.doodad.data.id).toEqual(1);
     expect(serialize(serializedResource).relationships.doodad.data.type).toEqual('doodads');
+    expect(serialize(serializedResource).relationships.somethingNull).toEqual(undefined);
   });
 });
