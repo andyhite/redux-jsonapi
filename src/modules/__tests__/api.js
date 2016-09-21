@@ -27,7 +27,7 @@ describe('API module', () => {
       });
 
       describe('when the resource has an ID', () => {
-        beforeEach(() => resource = { ...resource, id: 1 });
+        beforeEach(() => { resource = { ...resource, id: 1 } });
 
         it('creates a PATCH request', () => {
           expect(actions.write(resource, payload)).toEqual({
