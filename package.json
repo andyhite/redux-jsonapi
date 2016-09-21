@@ -29,6 +29,7 @@
     "babel-preset-react": "^6.11.1",
     "babel-preset-stage-0": "^6.5.0",
     "bumped": "^0.9.3",
+    "codeclimate-test-reporter": "^0.3.3",
     "cpx": "^1.3.2",
     "cross-env": "^2.0.0",
     "eslint": "^3.4.0",
