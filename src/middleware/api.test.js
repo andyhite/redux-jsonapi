@@ -54,8 +54,8 @@ describe('Middleware', () => {
         method: 'GET',
         body: undefined,
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
+          'Accept': 'application/vnd.api+json',
+          'Content-Type': 'application/vnd.api+json',
         },
       })
     });
@@ -80,8 +80,8 @@ describe('Middleware', () => {
           data: serialize(article),
         }),
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
+          'Accept': 'application/vnd.api+json',
+          'Content-Type': 'application/vnd.api+json',
         },
       })
     });
@@ -106,8 +106,8 @@ describe('Middleware', () => {
           data: serialize(article),
         }),
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
+          'Accept': 'application/vnd.api+json',
+          'Content-Type': 'application/vnd.api+json',
         },
       })
     });
@@ -132,8 +132,8 @@ describe('Middleware', () => {
           data: serialize(article),
         }),
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
+          'Accept': 'application/vnd.api+json',
+          'Content-Type': 'application/vnd.api+json',
         },
       })
     });
