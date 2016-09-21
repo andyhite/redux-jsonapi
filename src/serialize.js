@@ -18,29 +18,27 @@ function serialize({ id, _type, _meta, ...otherAttributes }) {
     if (typeof otherAttributes[key] === 'function') {
       const data = otherAttributes[key].call();
 
-      if (data) {
-        if (Array.isArray(data)) {
-          return {
-            ...resource,
-            relationships: {
-              ...resource.relationships,
-              [decamelize(key)]: {
-                data: serializeRelationships(data),
-              },
-            },
-          };
-        }
-
+      if (Array.isArray(data)) {
         return {
           ...resource,
           relationships: {
             ...resource.relationships,
             [decamelize(key)]: {
-              data: serializeRelationship(data),
+              data: serializeRelationships(data),
             },
           },
         };
       }
+
+      return {
+        ...resource,
+        relationships: {
+          ...resource.relationships,
+          [decamelize(key)]: {
+            data: data && serializeRelationship(data),
+          },
+        },
+      };
     }
 
     return {
