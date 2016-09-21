@@ -20,7 +20,7 @@ npm install --save redux-jsonapi
 
 ### The Basics
 
-The following will fetch a widget from `GET http://example.com/widgets/1`, add it to the application state under `api` (indexed by it's ID), and output the new state to the console.
+The following will fetch a widget from `GET http://example.com/widgets/1` (including it's associated foobars) add it to the application state under `api` (indexed by it's ID), and output the new state to the console.
 
 ```js
 import { createStore, combineReducers } from 'redux';
@@ -38,42 +38,29 @@ store.subscribe(() => {
   console.log(store.getState().api);
 });
 
-store.dispatch(apiActions.read({
-  id: 1,
-  type: 'widgets',
+store.dispatch(apiActions.read({ id: 1, _type: 'widgets' }. {
+  params: {
+    include: 'foobars'
+  },
 }));
 ```
 
 Creating a widget via the API and adding it to the application state on success isn't much more complicated:
 
 ```js
-store.dispatch(apiActions.write({
-  type: 'widgets',
-  attributes: {
-    name: 'Super Cool Widget',
-  },
-}));
+store.dispatch(apiActions.write({ _type: 'widgets', name: 'Super Cool Widget' }));
 ```
 
 Updating an existing record is nearly identical - simply make sure the resource has an ID property:
 
 ```js
-store.dispatch(apiActions.write({
-  id: 1,
-  type: 'widgets',
-  attributes: {
-    name: 'Super Cool Widget With A New Name',
-  },
-}));
+store.dispatch(apiActions.write({ _type: 'widgets', id: 1, name: 'Super Cool Widget With A New Name' }));
 ```
 
 Deleting a record is very similar:
 
 ```js
-store.dispatch(apiActions.remove({
-  id: 1,
-  type: 'widgets',
-}));
+store.dispatch(apiActions.remove({ _type: 'widgets', id: 1 }));
 ```
 
 ### Using Data
@@ -128,16 +115,14 @@ store.subscribe(() => {
   console.log(widget);
 });
 
-store.dispatch(apiActions.read({
-  id: 1,
-  type: 'widgets',
-}));
+store.dispatch(apiActions.read({ id: 1, _type: 'widgets' }));
 ```
 
 The denormalized instance looks something like this:
 
 ```js
 const widget = {
+  _type: 'widgets',
   id: 1,
   name: 'Super Cool Widget',
   doodad: function() { // Calling this returns the associated doodad }
