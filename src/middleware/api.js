@@ -44,7 +44,7 @@ function createMiddleware(host, defaultHeaders = getDefaultHeaders()) {
     return urlParts.join('');
   };
 
-  const requestAction = (method, { resource, params, headers }) => {
+  const requestAction = (method, { resource, params, headers } = {}) => {
     const url = getURL(resource, params);
 
     return fetch(url, {
@@ -64,13 +64,12 @@ function createMiddleware(host, defaultHeaders = getDefaultHeaders()) {
   const requestActions = {
     [apiActions.GET]: (options) => requestAction('GET', options),
     [apiActions.POST]: (options) => requestAction('POST', options),
-    [apiActions.PUT]: (options) => requestAction('PUT', options),
     [apiActions.PATCH]: (options) => requestAction('PATCH', options),
     [apiActions.DELETE]: (options) => requestAction('DELETE', options),
   };
 
   return (store) => (next) => (action) => {
-    if (requestActions[action.type]) {
+    if (requestActions.hasOwnProperty(action.type)) {
       next(action);
 
       return requestActions[action.type](action.payload).then((data) => {
