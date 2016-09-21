@@ -2,7 +2,7 @@
   "name": "redux-jsonapi",
   "description": "Redux reducer, actions, and serializers for JSON:API",
   "homepage": "https://github.com/andhite/redux-jsonapi#readme",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "dist/index.js",
   "author": {
     "name": "Andrew Hite"
@@ -68,8 +68,8 @@
       "./setup.jest.js"
     ],
     "testPathDirs": [
-      "./src",
-      "./example"
+      "./example",
+      "./src"
     ],
     "testRegex": "\\.test\\.js$"
   }
