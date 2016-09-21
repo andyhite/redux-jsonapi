@@ -1,4 +1,4 @@
-import deserialize from '../deserialize';
+import deserialize from './deserialize';
 
 describe('Deserialize', () => {
   const store = {

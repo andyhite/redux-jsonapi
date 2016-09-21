@@ -1,5 +1,5 @@
-import reducer, * as actions from '../api';
-import serialize from '../../serialize';
+import reducer, * as actions from './api';
+import serialize from '../serialize';
 
 describe('API module', () => {
   describe('Action Creators', () => {
