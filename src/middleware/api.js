@@ -25,10 +25,18 @@ function handleErrors(response) {
 
 function handleResponse(response) {
   return response.json().then(({ data, included = [], meta = {} }) => {
+    if (data) {
+      return {
+        resources: [...(Array.isArray(data) ? data : [data]), ...included],
+        result: Array.isArray(data) ? data.map((r) => r.id) : data.id,
+        meta,
+      };
+    }
+
     return {
-      resources: [...(Array.isArray(data) ? data : [data]), ...included],
-      result: Array.isArray(data) ? data.map((r) => r.id) : data.id,
-      meta,
+      resources: [],
+      result: null,
+      meta
     };
   });
 }
