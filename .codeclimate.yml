@@ -1,0 +1,13 @@
+engines:
+  eslint:
+    enabled: true
+    channel: "eslint-3"
+  duplication:
+    enabled: true
+  fixme:
+    enabled: true
+  nodesecurity:
+    enabled: true
+ratings:
+  paths:
+    - src/**
