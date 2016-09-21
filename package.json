@@ -2,7 +2,7 @@
   "name": "redux-jsonapi",
   "description": "Redux reducer, actions, and serializers for JSON:API",
   "homepage": "https://github.com/andhite/redux-jsonapi#readme",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "dist/index.js",
   "author": {
     "name": "Andrew Hite"
@@ -14,9 +14,6 @@
   "bugs": {
     "url": "https://github.com/andyhite/redux-jsonapi/issues"
   },
-  "files": [
-    "dist"
-  ],
   "dependencies": {
     "humps": "^1.1.0",
     "qs": "^6.2.1"
@@ -48,6 +45,9 @@
     "redux-mock-store": "^1.2.0",
     "rimraf": "^2.5.4"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "cross-env NODE_ENV=production babel ./src --out-dir ./dist --ignore __tests__",
     "clean": "rimraf dist",
