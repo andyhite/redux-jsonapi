@@ -2,6 +2,7 @@
 
 [![Travis CI](https://travis-ci.org/andyhite/redux-jsonapi.svg)](https://travis-ci.org/andyhite/redux-jsonapi)
 [![Code Climate](https://codeclimate.com/github/andyhite/redux-jsonapi/badges/gpa.svg)](https://codeclimate.com/github/andyhite/redux-jsonapi)
+[![Test Coverage](https://codeclimate.com/github/andyhite/redux-jsonapi/badges/coverage.svg)](https://codeclimate.com/github/andyhite/redux-jsonapi/coverage)
 
 Redux JSON:API is a collection of actions and reducers for Redux that help ease the use of a [JSON:API](http://jsonapi.org/) compliant API.
 
