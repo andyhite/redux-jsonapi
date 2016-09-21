@@ -1,7 +1,7 @@
 import configureStore from 'redux-mock-store';
-import createApiMiddleware from './api';
+import createApiMiddleware from './createApiMiddleware';
 import * as apiActions from '../modules/api';
-import serialize from '../serialize';
+import serialize from '../serializers/serialize';
 
 const apiMiddleware = createApiMiddleware('http://example.com');
 const middlewares = [apiMiddleware];

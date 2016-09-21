@@ -1,5 +1,5 @@
 import { camelize } from 'humps';
-import serialize from '../serialize';
+import serialize from '../serializers/serialize';
 
 export const RECEIVE = '@@redux-jsonapi/RECEIVE';
 export const GET = '@@redux-jsonapi/GET';
