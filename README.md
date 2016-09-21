@@ -154,6 +154,10 @@ widget.doodad = () => newDoodad;
 store.dispatch(apiActions.write(widget));
 ```
 
+## Example
+
+See the [example](https://github.com/andyhite/redux-jsonapi/tree/master/examples) directory.
+
 ## License
 
 MIT
