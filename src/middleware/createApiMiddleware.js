@@ -23,22 +23,22 @@ function handleErrors(response) {
   return response;
 }
 
-function handleResponse(response) {
-  return response.json().then(({ data, included = [], meta = {} }) => {
-    if (data) {
-      return {
-        resources: [...(Array.isArray(data) ? data : [data]), ...included],
-        result: Array.isArray(data) ? data.map((r) => r.id) : data.id,
-        meta,
-      };
-    }
+async function handleResponse(response) {
+  const { data, included = [], meta = {} } = await response.json();
 
+  if (data) {
     return {
-      resources: [],
-      result: null,
-      meta
+      resources: [...(Array.isArray(data) ? data : [data]), ...included],
+      result: Array.isArray(data) ? data.map((r) => r.id) : data.id,
+      meta,
     };
-  });
+  }
+
+  return {
+    resources: [],
+    result: null,
+    meta
+  };
 }
 
 function createMiddleware(host, defaultHeaders = getDefaultHeaders()) {
@@ -52,21 +52,22 @@ function createMiddleware(host, defaultHeaders = getDefaultHeaders()) {
     return urlParts.join('');
   };
 
-  const requestAction = (method, { resource, params, headers } = {}) => {
+  const requestAction = async (method, { resource, params, headers } = {}) => {
     const url = getURL(resource, params);
 
-    return fetch(url, {
+    let response = await fetch(url, {
       method,
       body: method !== 'GET' ? serialize({ data: resource }) : undefined,
       headers: {
         ...defaultHeaders,
         ...headers,
       },
-    }).then((response) => (
-      handleErrors(response)
-    )).then((response) => (
-      handleResponse(response)
-    ));
+    });
+
+    response = handleErrors(response);
+    response = handleResponse(response);
+
+    return response;
   };
 
   const requestActions = {
@@ -76,14 +77,13 @@ function createMiddleware(host, defaultHeaders = getDefaultHeaders()) {
     [apiActions.DELETE]: (options) => requestAction('DELETE', options),
   };
 
-  return (store) => (next) => (action) => {
+  return (store) => (next) => async (action) => {
     if (requestActions.hasOwnProperty(action.type)) {
       next(action);
 
-      return requestActions[action.type](action.payload).then((data) => {
-        store.dispatch(apiActions.receive(data.resources));
-        return data;
-      });
+      const data = await requestActions[action.type](action.payload);
+      store.dispatch(apiActions.receive(data.resources));
+      return data;
     }
 
     return next(action);

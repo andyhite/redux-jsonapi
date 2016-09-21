@@ -9,14 +9,16 @@ function getDefaultState() {
 };
 
 export function fetchArticles() {
-  return (dispatch) => {
-    return dispatch(apiActions.read({ _type: 'articles' }, {
+  return async (dispatch) => {
+    const data = await dispatch(apiActions.read({ _type: 'articles' }, {
       params: {
         include: ['author', 'comments', 'author.comments'].join(','),
       },
-    })).then((data) => {
-      dispatch({ type: FETCH_ARTICLES, payload: { articleIds: data.result }});
-    });
+    }));
+
+    dispatch({ type: FETCH_ARTICLES, payload: { articleIds: data.result }});
+
+    return data;
   };
 }
 

@@ -33,6 +33,11 @@ describe('Middleware', () => {
         await store.dispatch(action);
         expect(store.getActions()).toContain(action);
       });
+
+      it('returns a promise with the data', async () => {
+        const data = await store.dispatch(action);
+        expect(data).toEqual({ resources: [], result: null, meta: {} });
+      });
     });
 
     describe('and the response is not OK', () => {
