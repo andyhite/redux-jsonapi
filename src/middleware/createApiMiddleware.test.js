@@ -24,12 +24,27 @@ describe('Middleware', () => {
   });
 
   describe('when the action is a redux-jsonapi HTTP verb', () => {
-    beforeEach(() => { fetchMock.get('http://example.com/articles', {}) });
     beforeEach(() => { action = apiActions.read({ _type: 'articles' }) });
 
-    it('dispatches a RECEIVE action with the response data', async () => {
-      await store.dispatch(action);
-      expect(store.getActions()).toContain(action);
+    describe('and the response is OK', () => {
+      beforeEach(() => { fetchMock.get('http://example.com/articles', {}) });
+
+      it('dispatches a RECEIVE action with the response data', async () => {
+        await store.dispatch(action);
+        expect(store.getActions()).toContain(action);
+      });
+    });
+
+    describe('and the response is not OK', () => {
+      beforeEach(() => { fetchMock.get('http://example.com/articles', 500) });
+
+      it('throws the error', async () => {
+        try {
+          await store.dispatch(action);
+        } catch(error) {
+          expect(error).toEqual(new Error('Internal Server Error'));
+        }
+      });
     });
   });
 
