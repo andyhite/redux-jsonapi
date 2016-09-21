@@ -13,6 +13,10 @@ module.exports = {
     jest: true
   },
 
+  globals: {
+    fetchMock: true,
+  },
+
   parserOptions: {
     ecmaVersion: 6,
     sourceType: 'module',
