@@ -8,72 +8,20 @@ describe('API module', () => {
     const headers = { lorem: 'ipsum' };
     const meta = { auth: true };
 
-    describe('get', () => {
-      it('creates an GET request', () => {
-        expect(actions.get(resource, { params, headers, meta })).toEqual({
-          type: actions.GET,
-          payload: {
-            params,
-            headers,
-            resource: serialize(resource),
-          },
-          meta,
-        });
-      });
-    });
+    const methods = { 'get': 'GET', 'post': 'POST', 'put': 'PUT', 'patch': 'PATCH', 'del': 'DELETE' };
 
-    describe('post', () => {
-      it('creates a POST request', () => {
-        expect(actions.post(resource, { params, headers, meta })).toEqual({
-          type: actions.POST,
-          payload: {
-            params,
-            headers,
-            resource: serialize(resource),
-          },
-          meta,
-        });
-      });
-    });
-
-    describe('put', () => {
-      it('creates a PUT request', () => {
-        expect(actions.put(resource, { params, headers, meta })).toEqual({
-          type: actions.PUT,
-          payload: {
-            params,
-            headers,
-            resource: serialize(resource),
-          },
-          meta,
-        });
-      });
-    });
-
-    describe('patch', () => {
-      it('creates a PATCH request', () => {
-        expect(actions.patch(resource, { params, headers, meta })).toEqual({
-          type: actions.PATCH,
-          payload: {
-            params,
-            headers,
-            resource: serialize(resource),
-          },
-          meta,
-        });
-      });
-    });
-
-    describe('del', () => {
-      it('creates a DELETE request', () => {
-        expect(actions.del(resource, { params, headers, meta })).toEqual({
-          type: actions.DELETE,
-          payload: {
-            params,
-            headers,
-            resource: serialize(resource),
-          },
-          meta,
+    Object.keys(methods).forEach((method) => {
+      describe(method, () => {
+        it(`creates an ${methods[method]} request`, () => {
+          expect(actions[method](resource, { params, headers, meta })).toEqual({
+            type: actions[methods[method]],
+            payload: {
+              params,
+              headers,
+              resource: serialize(resource),
+            },
+            meta,
+          });
         });
       });
     });
