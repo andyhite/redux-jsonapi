@@ -156,7 +156,7 @@ store.dispatch(apiActions.write(widget));
 
 ## Example
 
-See the [example](https://github.com/andyhite/redux-jsonapi/tree/master/examples) directory.
+See the [example](https://github.com/andyhite/redux-jsonapi/tree/master/example) directory.
 
 ## License
 
