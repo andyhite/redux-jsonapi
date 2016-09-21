@@ -3,25 +3,70 @@ import serialize from '../../serialize';
 
 describe('API module', () => {
   describe('Action Creators', () => {
-    const resource = { type: 'widgets' };
-    const params = { foo: 'bar' };
-    const headers = { lorem: 'ipsum' };
-    const meta = { auth: true };
+    let resource = { _type: 'widgets' };
+    let payload = {
+      params: { page: 1 },
+      headers: { 'Authorization': 'Token token=123' },
+      meta: { auth: true },
+    };
 
-    const methods = { 'get': 'GET', 'post': 'POST', 'put': 'PUT', 'patch': 'PATCH', 'del': 'DELETE' };
 
-    Object.keys(methods).forEach((method) => {
-      describe(method, () => {
-        it(`creates an ${methods[method]} request`, () => {
-          expect(actions[method](resource, { params, headers, meta })).toEqual({
-            type: actions[methods[method]],
+    describe('write', () => {
+      describe('when the resource does not have an ID', () => {
+        it('creates a POST request', () => {
+          expect(actions.write(resource, payload)).toEqual({
+            type: actions.POST,
             payload: {
-              params,
-              headers,
+              params: payload.params,
+              headers: payload.headers,
               resource: serialize(resource),
             },
-            meta,
+            meta: payload.meta,
           });
+        });
+      });
+
+      describe('when the resource has an ID', () => {
+        beforeEach(() => resource = { ...resource, id: 1 });
+
+        it('creates a PATCH request', () => {
+          expect(actions.write(resource, payload)).toEqual({
+            type: actions.PATCH,
+            payload: {
+              params: payload.params,
+              headers: payload.headers,
+              resource: serialize(resource),
+            },
+            meta: payload.meta,
+          });
+        });
+      });
+    });
+
+    describe('read', () => {
+      it('creates a GET request', () => {
+        expect(actions.read(resource, payload)).toEqual({
+          type: actions.GET,
+          payload: {
+            params: payload.params,
+            headers: payload.headers,
+            resource: serialize(resource),
+          },
+          meta: payload.meta,
+        });
+      });
+    });
+
+    describe('remove', () => {
+      it('creates a DELETE request', () => {
+        expect(actions.remove(resource, payload)).toEqual({
+          type: actions.DELETE,
+          payload: {
+            params: payload.params,
+            headers: payload.headers,
+            resource: serialize(resource),
+          },
+          meta: payload.meta,
         });
       });
     });

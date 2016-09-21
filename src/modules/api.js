@@ -4,36 +4,30 @@ import serialize from '../serialize';
 export const RECEIVE = '@@redux-jsonapi/RECEIVE';
 export const GET = '@@redux-jsonapi/GET';
 export const POST = '@@redux-jsonapi/POST';
-export const PUT = '@@redux-jsonapi/PUT';
 export const PATCH = '@@redux-jsonapi/PATCH';
 export const DELETE = '@@redux-jsonapi/DELETE';
 
-const request = (method, payload = {}, meta = {}) => {
+const request = (method, resource, { meta, ...payload }) => {
   return {
     type: method,
-    payload,
+    payload: {
+      ...payload,
+      resource,
+    },
     meta,
   };
 };
 
-export const get = (resource, { meta, ...payload } = {}) => {
-  return request(GET, { ...payload, resource: serialize(resource) }, meta);
+export const read = (resource, payload = {}) => {
+  return request(GET, serialize(resource), payload);
 };
 
-export const post = (resource, { meta, ...payload } = {}) => {
-  return request(POST, { ...payload, resource: serialize(resource) }, meta);
+export const write = (resource, payload = {}) => {
+  return request(resource.hasOwnProperty('id') ? PATCH : POST, serialize(resource), payload);
 };
 
-export const put = (resource, { meta, ...payload } = {}) => {
-  return request(PUT, { ...payload, resource: serialize(resource) }, meta);
-};
-
-export const patch = (resource, { meta, ...payload } = {}) => {
-  return request(PATCH, { ...payload, resource: serialize(resource) }, meta);
-};
-
-export const del = (resource, { meta, ...payload } = {}) => {
-  return request(DELETE, { ...payload, resource: serialize(resource) }, meta);
+export const remove = (resource, payload = {}) => {
+  return request(DELETE, serialize(resource), payload);
 };
 
 export const receive = (resources) => {

@@ -19,7 +19,7 @@ npm install --save redux-jsonapi
 
 ### The Basics
 
-The following will fetch a widget from `http://example.com/widgets/1`, add it to the application state under `api` (indexed by it's ID), and output the new state to the console.
+The following will fetch a widget from `GET http://example.com/widgets/1`, add it to the application state under `api` (indexed by it's ID), and output the new state to the console.
 
 ```js
 import { createStore, combineReducers } from 'redux';
@@ -37,7 +37,7 @@ store.subscribe(() => {
   console.log(store.getState().api);
 });
 
-store.dispatch(apiActions.get({
+store.dispatch(apiActions.read({
   id: 1,
   type: 'widgets',
 }));
@@ -46,7 +46,7 @@ store.dispatch(apiActions.get({
 Creating a widget via the API and adding it to the application state on success isn't much more complicated:
 
 ```js
-store.dispatch(apiActions.post({
+store.dispatch(apiActions.write({
   type: 'widgets',
   attributes: {
     name: 'Super Cool Widget',
@@ -54,10 +54,10 @@ store.dispatch(apiActions.post({
 }));
 ```
 
-Updating an existing record is also very similar:
+Updating an existing record is nearly identical - simply make sure the resource has an ID property:
 
 ```js
-store.dispatch(apiActions.put({
+store.dispatch(apiActions.write({
   id: 1,
   type: 'widgets',
   attributes: {
@@ -66,10 +66,10 @@ store.dispatch(apiActions.put({
 }));
 ```
 
-As is deleting a record:
+Deleting a record is very similar:
 
 ```js
-store.dispatch(apiActions.del({
+store.dispatch(apiActions.remove({
   id: 1,
   type: 'widgets',
 }));
@@ -127,7 +127,7 @@ store.subscribe(() => {
   console.log(widget);
 });
 
-store.dispatch(apiActions.get({
+store.dispatch(apiActions.read({
   id: 1,
   type: 'widgets',
 }));
@@ -145,12 +145,12 @@ const widget = {
 
 With this new denormalized resource, we can access the widget's name via `widget.name`, and it's associated doodad by calling `widget.doodad()`.
 
-When it comes time to update the widget, simply change it's values and dispatch the `apiActions.put` action with the object.
+When it comes time to update the widget, simply change it's values and dispatch the `apiActions.write` action with the object.
 
 ```js
 widget.name = 'New Name';
 widget.doodad = () => newDoodad;
-store.dispatch(apiActions.update(widget));
+store.dispatch(apiActions.write(widget));
 ```
 
 ## License
