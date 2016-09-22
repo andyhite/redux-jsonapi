@@ -24,10 +24,16 @@ describe('Middleware', () => {
   });
 
   describe('when the action is a redux-jsonapi HTTP verb', () => {
+    const article = { id: 1, type: 'articles', attributes: { title: 'Something about Redux' } };
+
+    const response = {
+      data: article,
+    };
+
     beforeEach(() => { action = apiActions.read({ _type: 'articles' }) });
 
     describe('and the response is OK', () => {
-      beforeEach(() => { fetchMock.get('http://example.com/articles', {}) });
+      beforeEach(() => { fetchMock.get('http://example.com/articles', response) });
 
       it('dispatches a RECEIVE action with the response data', async () => {
         await store.dispatch(action);
@@ -36,18 +42,19 @@ describe('Middleware', () => {
 
       it('returns a promise with the data', async () => {
         const data = await store.dispatch(action);
-        expect(data).toEqual({ resources: [], result: null, meta: {} });
+        expect(data).toEqual({ resources: [article], result: article.id, meta: {} });
       });
     });
 
     describe('and the response is not OK', () => {
       beforeEach(() => { fetchMock.get('http://example.com/articles', 500) });
 
-      it('throws the error', async () => {
+      it('throws the error with message and status code', async () => {
         try {
           await store.dispatch(action);
         } catch(error) {
-          expect(error).toEqual(new Error('Internal Server Error'));
+          expect(error.message).toEqual('Internal Server Error');
+          expect(error.status).toEqual(500);
         }
       });
     });
