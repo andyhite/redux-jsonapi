@@ -3,7 +3,9 @@ import createApiMiddleware from './createApiMiddleware';
 import * as apiActions from '../modules/api';
 import { serialize } from '../serializers';
 
-const apiMiddleware = createApiMiddleware('http://example.com');
+const apiMiddleware = createApiMiddleware('http://example.com', {
+  'Special-Header': 'value-here',
+});
 const middlewares = [apiMiddleware];
 const mockStore = configureStore(middlewares);
 
@@ -72,7 +74,7 @@ describe('Middleware', () => {
     };
 
     beforeEach(() => { fetchMock.get('http://example.com/articles', response) });
-    beforeEach(() => { action = apiActions.read({ _type: 'articles' }) });
+    beforeEach(() => { action = apiActions.read({ _type: 'articles' }, { headers: { 'Custom': 'header' }}) });
 
     it('executes a GET request with the given payload', async () => {
       await store.dispatch(action);
@@ -83,6 +85,8 @@ describe('Middleware', () => {
         headers: {
           'Accept': 'application/vnd.api+json',
           'Content-Type': 'application/vnd.api+json',
+          'Special-Header': 'value-here',
+          'Custom': 'header',
         },
       })
     });
@@ -109,6 +113,7 @@ describe('Middleware', () => {
         headers: {
           'Accept': 'application/vnd.api+json',
           'Content-Type': 'application/vnd.api+json',
+          'Special-Header': 'value-here',
         },
       })
     });
@@ -135,6 +140,7 @@ describe('Middleware', () => {
         headers: {
           'Accept': 'application/vnd.api+json',
           'Content-Type': 'application/vnd.api+json',
+          'Special-Header': 'value-here',
         },
       })
     });
@@ -161,6 +167,7 @@ describe('Middleware', () => {
         headers: {
           'Accept': 'application/vnd.api+json',
           'Content-Type': 'application/vnd.api+json',
+          'Special-Header': 'value-here',
         },
       })
     });
