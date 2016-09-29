@@ -1,9 +1,16 @@
 language: node_js
 node_js:
-- '6.7'
+  - '6.7'
+env:
+  - CXX=g++-4.8
 addons:
   code_climate:
     repo_token: d84ae3cc70779e07ac85bff2b51eb2f156419191096f8d2f4d13861d8c248106
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
 script:
   - npm test -- --coverage
 after_script:
