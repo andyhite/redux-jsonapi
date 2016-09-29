@@ -41,7 +41,7 @@ async function handleResponse(response) {
   };
 }
 
-function createMiddleware(host, defaultHeaders = getDefaultHeaders()) {
+function createMiddleware(host, defaultHeaders) {
   const getURL = (resource, params) => {
     let urlParts = [host];
 
@@ -54,13 +54,13 @@ function createMiddleware(host, defaultHeaders = getDefaultHeaders()) {
 
   const requestAction = async (method, { resource, params, headers } = {}) => {
     const url = getURL(resource, params);
+    const mergedHeaders = Object.assign({}, getDefaultHeaders(), defaultHeaders, headers);
 
     let response = await fetch(url, {
       method,
       body: method !== 'GET' ? serialize({ data: resource }) : undefined,
       headers: {
-        ...defaultHeaders,
-        ...headers,
+        ...mergedHeaders,
       },
     });
 
