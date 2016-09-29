@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-- '6.3'
+- '6.7'
 addons:
   code_climate:
     repo_token: d84ae3cc70779e07ac85bff2b51eb2f156419191096f8d2f4d13861d8c248106
