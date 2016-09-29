@@ -41,7 +41,7 @@ async function handleResponse(response) {
   };
 }
 
-function createMiddleware(host, defaultHeaders = getDefaultHeaders()) {
+function createMiddleware(host, defaultHeaders) {
   const getURL = (resource, params) => {
     let urlParts = [host];
 
@@ -59,6 +59,7 @@ function createMiddleware(host, defaultHeaders = getDefaultHeaders()) {
       method,
       body: method !== 'GET' ? serialize({ data: resource }) : undefined,
       headers: {
+        ...getDefaultHeaders(),
         ...defaultHeaders,
         ...headers,
       },
