@@ -38,7 +38,7 @@ store.subscribe(() => {
   console.log(store.getState().api);
 });
 
-store.dispatch(apiActions.read({ id: 1, _type: 'widgets' }. {
+store.dispatch(apiActions.read({ id: 1, _type: 'widgets' }, {
   params: {
     include: 'foobars'
   },
@@ -61,6 +61,17 @@ Deleting a record is very similar:
 
 ```js
 store.dispatch(apiActions.remove({ _type: 'widgets', id: 1 }));
+```
+
+#### Custom Headers
+You can override the default headers by simply passing an object as 2nd parameter into `createApiMiddleware`
+But be aware that you will need `'Content-Type':'application/vnd.api+json'` and `Accept:'application/vnd.api+json'` in there.
+```js
+const apiMiddleware = createApiMiddleware('http://example.com', {
+    Authorization:  'JWT Token',
+    'Content-Type': 'application/vnd.api+json',
+    Accept:         'application/vnd.api+json',
+});
 ```
 
 ### Using Data
