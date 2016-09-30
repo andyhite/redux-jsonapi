@@ -42,7 +42,7 @@ async function handleResponse(response) {
 }
 
 function createMiddleware(host, defaultHeaders) {
-  const getURL = (resources, params) => {
+  const getURL = (resources, params, options = {}) => {
     let urlParts = [host];
 
     resources.forEach((resource) => {
@@ -52,11 +52,12 @@ function createMiddleware(host, defaultHeaders) {
 
     if (params) urlParts = [...urlParts, '?', queryString.stringify(params)];
 
+    if (options.formatURL) return options.formatURL(urlParts.join(''));
     return urlParts.join('');
   };
 
-  const requestAction = async (method, { resources, params, headers } = {}) => {
-    const url = getURL(resources, params);
+  const requestAction = async (method, { resources, params, headers, options } = {}) => {
+    const url = getURL(resources, params, options);
 
     let response = await fetch(url, {
       method,

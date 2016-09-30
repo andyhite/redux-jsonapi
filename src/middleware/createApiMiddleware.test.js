@@ -52,6 +52,16 @@ describe('Middleware', () => {
       });
     });
 
+    describe('and there is a formatURL option specified', () => {
+      beforeEach(() => { fetchMock.get('http://example.com/articles/', response) });
+      beforeEach(() => { action = apiActions.read({ _type: 'articles' }, { options: { formatURL: (url) => url + '/' } }) });
+
+      it('makes the request against a nested resource url', async () => {
+        await store.dispatch(action);
+        expect(fetchMock.lastUrl()).toEqual('http://example.com/articles/');
+      });
+    });
+
     describe('and the response is OK', () => {
       beforeEach(() => { fetchMock.get('http://example.com/articles', response) });
       beforeEach(() => { action = apiActions.read({ _type: 'articles' }) });
