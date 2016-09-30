@@ -32,10 +32,29 @@ describe('Middleware', () => {
       data: article,
     };
 
-    beforeEach(() => { action = apiActions.read({ _type: 'articles' }) });
+    describe('and there is a single resource provided', () => {
+      beforeEach(() => { fetchMock.get('http://example.com/articles', response) });
+      beforeEach(() => { action = apiActions.read([{ _type: 'articles' }]) });
+
+      it('makes the request against an un-nested resource url', async () => {
+        await store.dispatch(action);
+        expect(fetchMock.lastUrl()).toEqual('http://example.com/articles');
+      });
+    });
+
+    describe('and there are multiple resources provided', () => {
+      beforeEach(() => { fetchMock.get('http://example.com/articles/1/authors', response) });
+      beforeEach(() => { action = apiActions.read([{ _type: 'articles', id: 1 }, { _type: 'authors' }]) });
+
+      it('makes the request against a nested resource url', async () => {
+        await store.dispatch(action);
+        expect(fetchMock.lastUrl()).toEqual('http://example.com/articles/1/authors');
+      });
+    });
 
     describe('and the response is OK', () => {
       beforeEach(() => { fetchMock.get('http://example.com/articles', response) });
+      beforeEach(() => { action = apiActions.read({ _type: 'articles' }) });
 
       it('dispatches a RECEIVE action with the response data', async () => {
         await store.dispatch(action);
@@ -50,6 +69,7 @@ describe('Middleware', () => {
 
     describe('and the response is not OK', () => {
       beforeEach(() => { fetchMock.get('http://example.com/articles', 500) });
+      beforeEach(() => { action = apiActions.read({ _type: 'articles' }) });
 
       it('throws the error with message and status code', async () => {
         try {

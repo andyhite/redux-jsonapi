@@ -19,7 +19,7 @@ describe('API module', () => {
             payload: {
               params: payload.params,
               headers: payload.headers,
-              resource: serialize(resource),
+              resources: [serialize(resource)],
             },
             meta: payload.meta,
           });
@@ -35,7 +35,7 @@ describe('API module', () => {
             payload: {
               params: payload.params,
               headers: payload.headers,
-              resource: serialize(resource),
+              resources: [serialize(resource)],
             },
             meta: payload.meta,
           });
@@ -50,7 +50,7 @@ describe('API module', () => {
           payload: {
             params: payload.params,
             headers: payload.headers,
-            resource: serialize(resource),
+            resources: [serialize(resource)],
           },
           meta: payload.meta,
         });
@@ -64,7 +64,7 @@ describe('API module', () => {
           payload: {
             params: payload.params,
             headers: payload.headers,
-            resource: serialize(resource),
+            resources: [serialize(resource)],
           },
           meta: payload.meta,
         });
