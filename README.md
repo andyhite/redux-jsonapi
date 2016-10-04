@@ -63,7 +63,18 @@ Deleting a record is very similar:
 store.dispatch(apiActions.remove({ _type: 'widgets', id: 1 }));
 ```
 
+#### Nested Resources
+
+To access the entities on a nested URL, provide an array of parent resources to the action. The following will fetch the entities from `GET http://example.com/widgets/1/doodads`:
+
+```js
+store.dispatch(apiActions.read([{ _type: 'widgets', id: 1 }, { _type: 'doodads' }]));
+```
+
+Note: the order of resources in the array determines the order of nesting.
+
 #### Custom Headers
+
 You can extend the default headers by simply passing an object as 2nd parameter into `createApiMiddleware`.
 ```js
 const apiMiddleware = createApiMiddleware('http://example.com', {

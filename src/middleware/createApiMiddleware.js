@@ -42,22 +42,26 @@ async function handleResponse(response) {
 }
 
 function createMiddleware(host, defaultHeaders) {
-  const getURL = (resource, params) => {
+  const getURL = (resources, params, options = {}) => {
     let urlParts = [host];
 
-    if (resource.type) urlParts = [...urlParts, '/', decamelize(resource.type)];
-    if (resource.id) urlParts = [...urlParts, '/', resource.id];
+    resources.forEach((resource) => {
+      if (resource.type) urlParts = [...urlParts, '/', decamelize(resource.type)];
+      if (resource.id) urlParts = [...urlParts, '/', resource.id];
+    });
+
     if (params) urlParts = [...urlParts, '?', queryString.stringify(params)];
 
+    if (options.formatURL) return options.formatURL(urlParts.join(''));
     return urlParts.join('');
   };
 
-  const requestAction = async (method, { resource, params, headers } = {}) => {
-    const url = getURL(resource, params);
+  const requestAction = async (method, { resources, params, headers, options } = {}) => {
+    const url = getURL(resources, params, options);
 
     let response = await fetch(url, {
       method,
-      body: method !== 'GET' ? serialize({ data: resource }) : undefined,
+      body: method !== 'GET' ? serialize({ data: resources[resources.length - 1] }) : undefined,
       headers: {
         ...getDefaultHeaders(),
         ...defaultHeaders,
