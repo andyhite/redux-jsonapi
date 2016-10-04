@@ -16,7 +16,7 @@ function serialize(resource) {
 function handleErrors(response) {
   if (!response.ok) {
     const error = new Error(response.statusText);
-    error.status = response.status;
+    error.response = response;
     throw error;
   }
 
@@ -65,10 +65,13 @@ function createMiddleware(host, defaultHeaders) {
       },
     });
 
-    response = handleErrors(response);
-    response = handleResponse(response);
+    if (response.ok) {
+      return handleResponse(response);
+    }
 
-    return response;
+     const error = new Error(response.statusText);
+      error.response = response;
+      throw error;
   };
 
   const requestActions = {
