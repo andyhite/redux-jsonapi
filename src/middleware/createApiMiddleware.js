@@ -73,9 +73,9 @@ function createMiddleware(host, defaultHeaders) {
       return handleResponse(response);
     }
 
-     const error = new Error(response.statusText);
-      error.response = response;
-      throw error;
+    const error = new Error(response.statusText);
+    error.response = response;
+    throw error;
   };
 
   const requestActions = {
