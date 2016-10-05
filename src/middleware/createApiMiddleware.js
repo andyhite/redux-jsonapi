@@ -61,7 +61,7 @@ function createMiddleware(host, defaultHeaders) {
 
     let response = await fetch(url, {
       method,
-      body: method !== 'GET' ? serialize({ data: resources[resources.length - 1] }) : undefined,
+      body: ['POST', 'PATCH'].includes(method) ? serialize({ data: resources[resources.length - 1] }) : undefined,
       headers: {
         ...getDefaultHeaders(),
         ...defaultHeaders,
@@ -70,7 +70,7 @@ function createMiddleware(host, defaultHeaders) {
     });
 
     response = handleErrors(response);
-    response = handleResponse(response);
+    response = response.status === 204 ? { resources } : handleResponse(response);
 
     return response;
   };
@@ -87,7 +87,7 @@ function createMiddleware(host, defaultHeaders) {
       next(action);
 
       const data = await requestActions[action.type](action.payload);
-      store.dispatch(apiActions.receive(data.resources));
+      store.dispatch(apiActions.receive(data.resources, action.type));
       return data;
     }
 

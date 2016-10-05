@@ -40,11 +40,12 @@ export const remove = (resources, payload = {}) => {
   return request(DELETE, prepareResources(resources), payload);
 };
 
-export const receive = (resources) => {
+export const receive = (resources, method) => {
   return {
     type: RECEIVE,
     payload: {
-      resources,
+      method,
+      resources
     },
   };
 };
@@ -53,13 +54,13 @@ function getInitialState() {
   return {};
 }
 
-function receiveReducer(state, { resources }) {
+function receiveReducer(state, { method, resources }) {
   return resources.reduce((nextState, resource) => {
     return {
       ...nextState,
       [camelize(resource.type)]: {
         ...nextState[camelize(resource.type)],
-        [resource.id]: resource,
+        [resource.id]: method === DELETE ? undefined : resource,
       },
     };
   }, state);
