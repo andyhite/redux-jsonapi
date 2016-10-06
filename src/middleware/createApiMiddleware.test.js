@@ -180,6 +180,7 @@ describe('Middleware', () => {
     const article = { _type: 'articles', id: 2, title: 'React blah blah blah' };
 
     const response = {
+      status: 204,
       data: null,
     };
 
@@ -191,9 +192,7 @@ describe('Middleware', () => {
       expect(fetchMock.lastUrl()).toEqual('http://example.com/articles/2');
       expect(fetchMock.lastOptions()).toEqual({
         method: 'DELETE',
-        body: JSON.stringify({
-          data: serialize(article),
-        }),
+        body: undefined,
         headers: {
           'Accept': 'application/vnd.api+json',
           'Content-Type': 'application/vnd.api+json',
