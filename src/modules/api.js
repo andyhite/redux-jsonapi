@@ -1,5 +1,5 @@
 import { camelize } from 'humps';
-import { serialize } from '../serializers';
+import { serialize, deserialize } from '../serializers';
 
 export const RECEIVE = '@@redux-jsonapi/RECEIVE';
 export const GET = '@@redux-jsonapi/GET';
@@ -49,6 +49,25 @@ export const receive = (resources, method) => {
     },
   };
 };
+
+export const fetchRelationships = (resource, payload = {}) => {
+  return (dispatch, getState) => {
+    return Promise.all(
+      Object.keys(resource).map((key) => {
+        if (typeof resource[key] === 'function') {
+          const relationship = resource[key]();
+
+          if (relationship && !relationship._meta.loaded) {
+            return dispatch(read(relationship, payload));
+          }
+        }
+      })
+    ).then(() => {
+      return deserialize(getState().api[resource._type][resource.id], getState().api);
+    });
+  };
+};
+
 
 function getInitialState() {
   return {};
