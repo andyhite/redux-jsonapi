@@ -69,13 +69,11 @@ function createMiddleware(host, defaultHeaders) {
       },
     });
 
-    if (response.ok) {
+    if (response.status === 204) {
+      return {resources};
+    } else if (response.ok) {
       return handleResponse(response);
     }
-
-        response = handleErrors(response);
-    response = response.status === 204 ? { resources } : handleResponse(response);
-
 
     const error = new Error(response.statusText);
     error.response = response;
