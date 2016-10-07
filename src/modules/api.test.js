@@ -1,15 +1,32 @@
+import configureStore from 'redux-mock-store';
 import reducer, * as actions from './api';
+import thunk from 'redux-thunk';
 import { serialize } from '../serializers';
+
+const middlewares = [thunk];
+const mockStore = configureStore(middlewares);
 
 describe('API module', () => {
   describe('Action Creators', () => {
-    let resource = { _type: 'widgets' };
-    let payload = {
+    let store;
+    let resource;
+    let payload;
+    let initialState;
+
+    beforeEach(() => { resource = { _type: 'widgets' } });
+
+    beforeEach(() => { payload = {
       params: { page: 1 },
       headers: { 'Authorization': 'Token token=123' },
       meta: { auth: true },
-    };
+    }});
 
+    beforeEach(() => { initialState = {
+      api: {}
+    }});
+
+    beforeEach(() => { store = mockStore(initialState) });
+    afterEach(() => { fetchMock.restore() });
 
     describe('write', () => {
       describe('when the resource does not have an ID', () => {
@@ -79,6 +96,33 @@ describe('API module', () => {
             resources: [resource],
           },
         });
+      });
+    });
+
+    describe('fetchRelationships', () => {
+      beforeEach(() => {
+        resource = {
+          ...resource,
+          id: '1',
+          foo: () => ({ id: 1, _type: 'foos', _meta: { loaded: false} }),
+        };
+      })
+
+      beforeEach(() => {
+        initialState = {
+          api: {
+            [resource._type]: {
+              [resource.id]: resource,
+            },
+          },
+        };
+      });
+
+      beforeEach(() => { store = mockStore(initialState) });
+
+      it('makes requests to load any currently un-loaded relationships', async () => {
+        await store.dispatch(actions.fetchRelationships(resource));
+        expect(store.getActions()).toEqual([actions.read(resource.foo())]);
       });
     });
   });

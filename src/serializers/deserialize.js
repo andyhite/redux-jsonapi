@@ -7,15 +7,17 @@ function deserializeRelationships(resources = [], store) {
 }
 
 function deserializeRelationship(resource = {}, store) {
-  if (!resource || !store[camelize(resource.type)] || !store[camelize(resource.type)][resource.id]) return null;
-  return deserialize(store[camelize(resource.type)][resource.id], store);
+  if (store[camelize(resource.type)] && store[camelize(resource.type)][resource.id]) {
+    return deserialize({ ...store[camelize(resource.type)][resource.id], meta: { loaded: true } }, store);
+  }
+
+  return deserialize({ ...resource, meta: { loaded: false } }, store);
 }
 
 function deserialize({ id, type, attributes, relationships, meta }, store) {
-  let resource = {};
+  let resource = { _type: type, _meta: meta };
 
   if (id) resource = { ...resource, id };
-  resource = { ...resource, _type: type };
 
   if (attributes) {
     resource = Object.keys(attributes).reduce((resource, key) => {
@@ -36,10 +38,6 @@ function deserialize({ id, type, attributes, relationships, meta }, store) {
         },
       };
     }, resource);
-  }
-
-  if (meta) {
-    resource._meta = meta;
   }
 
   return resource;
