@@ -57,8 +57,17 @@ export const fetchRelationships = (resource, payload = {}) => {
         if (typeof resource[key] === 'function') {
           const relationship = resource[key]();
 
-          if (relationship && !relationship._meta.loaded) {
-            return dispatch(read(relationship, payload));
+          if (relationship) {
+            if (Array.isArray(relationship)) {
+              return Promise.all(relationship.filter((relation) => {
+                  return relation._meta && !relation._meta.loaded
+                }).map((relation) => {
+                  return dispatch(read(relation, payload));
+                })
+              );
+            } else if (relationship._meta && !relationship._meta.loaded){
+              return dispatch(read(relationship, payload));
+            }
           }
         }
       })

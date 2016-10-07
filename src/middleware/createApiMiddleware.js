@@ -14,13 +14,9 @@ function serialize(resource) {
 }
 
 function handleErrors(response) {
-  if (!response.ok) {
     const error = new Error(response.statusText);
     error.response = response;
     throw error;
-  }
-
-  return response;
 }
 
 async function handleResponse(response) {
@@ -69,15 +65,14 @@ function createMiddleware(host, defaultHeaders) {
       },
     });
 
-    if (response.status === 204) {
-      return {resources};
-    } else if (response.ok) {
+    if (response.ok) {
+      if (response.status === 204) {
+        return {resources};
+      }
       return handleResponse(response);
     }
+    handleErrors(response);
 
-    const error = new Error(response.statusText);
-    error.response = response;
-    throw error;
   };
 
   const requestActions = {
