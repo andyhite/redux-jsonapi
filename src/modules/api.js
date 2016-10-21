@@ -58,7 +58,7 @@ export const fetchRelationships = (resource, payload = {}) => {
           const relationship = resource[key]();
 
           if (relationship) {
-            if (Array.isArray(relationship)) {
+            if (Array.isArray(relationship) && relationship.length) {
               return Promise.all(relationship.filter((relation) => {
                   return relation._meta && !relation._meta.loaded
                 }).map((relation) => {
@@ -70,9 +70,11 @@ export const fetchRelationships = (resource, payload = {}) => {
             }
           }
         }
+      }).filter((promise) => {
+        return promise != undefined;
       })
     ).then(() => {
-      return deserialize(getState().api[resource._type][resource.id], getState().api);
+      return deserialize(getState().api[camelize(resource._type)][resource.id], getState().api);
     });
   };
 };
