@@ -1,6 +1,8 @@
 import queryString from 'qs';
 import { decamelize } from 'humps';
 import * as apiActions from '../modules/api';
+import fetch from 'isomorphic-fetch'
+
 
 function getDefaultHeaders() {
   return {
