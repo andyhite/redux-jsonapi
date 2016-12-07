@@ -25,11 +25,16 @@ function handleErrors(response) {
 
 async function handleResponse(response) {
   const { data, included = [], meta = {} } = await response.json();
+  const headers = [...response.headers].reduce((result, item) => {
+    result[item[0]] = item[1];
+    return result;
+  }, {});
 
   if (data) {
     return {
       resources: [...(Array.isArray(data) ? data : [data]), ...included],
       result: Array.isArray(data) ? data.map((r) => r.id) : data.id,
+      headers,
       meta,
     };
   }
@@ -87,7 +92,7 @@ function createMiddleware(host, defaultHeaders) {
       next(action);
 
       const data = await requestActions[action.type](action.payload);
-      store.dispatch(apiActions.receive(data.resources, action.type));
+      store.dispatch(apiActions.receive(data.resources, action.type, data.headers));
       return data;
     }
 
