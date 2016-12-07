@@ -40,11 +40,12 @@ export const remove = (resources, payload = {}) => {
   return request(DELETE, prepareResources(resources), payload);
 };
 
-export const receive = (resources, method) => {
+export const receive = (resources, method, headers) => {
   return {
     type: RECEIVE,
     payload: {
       method,
+      headers,
       resources
     },
   };
