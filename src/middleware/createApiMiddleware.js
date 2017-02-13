@@ -29,13 +29,15 @@ async function handleResponse(response) {
       resources: [...(Array.isArray(data) ? data : [data]), ...included],
       result: Array.isArray(data) ? data.map((r) => r.id) : data.id,
       meta,
+      status: response.status
     };
   }
 
   return {
     resources: [],
     result: null,
-    meta
+    meta,
+    status: response.status
   };
 }
 
