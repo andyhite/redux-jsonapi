@@ -7,6 +7,10 @@ function deserializeRelationships(resources = [], store) {
 }
 
 function deserializeRelationship(resource = {}, store) {
+  if (!resource) {
+    return null;
+  }
+
   if (store[camelize(resource.type)] && store[camelize(resource.type)][resource.id]) {
     return deserialize({ ...store[camelize(resource.type)][resource.id], meta: { loaded: true } }, store);
   }

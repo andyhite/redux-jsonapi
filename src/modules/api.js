@@ -1,6 +1,7 @@
 import { camelize } from 'humps';
 import { serialize, deserialize } from '../serializers';
 
+export const FAIL = '@@redux-jsonapi/FAIL';
 export const RECEIVE = '@@redux-jsonapi/RECEIVE';
 export const GET = '@@redux-jsonapi/GET';
 export const POST = '@@redux-jsonapi/POST';
@@ -9,7 +10,7 @@ export const DELETE = '@@redux-jsonapi/DELETE';
 
 const request = (method, resources, { meta = {}, ...payload }) => {
   return {
-    type: method,
+    type:    method,
     payload: {
       ...payload,
       resources,
@@ -42,10 +43,22 @@ export const remove = (resources, payload = {}) => {
 
 export const receive = (resources, method) => {
   return {
-    type: RECEIVE,
+    type:    RECEIVE,
     payload: {
       method,
       resources
+    },
+  };
+};
+
+export const fail = (response, method) => {
+  const { statusText } = response;
+  return {
+    type:    FAIL,
+    payload: {
+      method,
+      response,
+      statusText,
     },
   };
 };
@@ -57,23 +70,33 @@ export const fetchRelationships = (resource, payload = {}) => {
         if (typeof resource[key] === 'function') {
           const relationship = resource[key]();
 
-          if (relationship && !relationship._meta.loaded) {
-            return dispatch(read(relationship, payload));
+          if (relationship) {
+            if (Array.isArray(relationship) && relationship.length) {
+              return Promise.all(relationship.filter((relation) => {
+                  return relation._meta && !relation._meta.loaded
+                }).map((relation) => {
+                  return dispatch(read(relation, payload));
+                })
+              );
+            } else if (relationship._meta && !relationship._meta.loaded) {
+              return dispatch(read(relationship, payload));
+            }
           }
         }
+      }).filter((promise) => {
+        return promise != undefined;
       })
     ).then(() => {
-      return deserialize(getState().api[resource._type][resource.id], getState().api);
+      return deserialize(getState().api[camelize(resource._type)][resource.id], getState().api);
     });
   };
 };
 
-
-function getInitialState() {
+function getInitialState () {
   return {};
 }
 
-function receiveReducer(state, { method, resources }) {
+function receiveReducer (state, { method, resources }) {
   return resources.reduce((nextState, resource) => {
     return {
       ...nextState,
@@ -85,8 +108,8 @@ function receiveReducer(state, { method, resources }) {
   }, state);
 }
 
-function reducer(state = getInitialState(), { type, payload }) {
-  switch(type) {
+function reducer (state = getInitialState(), { type, payload }) {
+  switch (type) {
     case RECEIVE:
       return receiveReducer(state, payload);
     default:
