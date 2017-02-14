@@ -3,45 +3,45 @@ import { decamelize } from 'humps';
 import * as apiActions from '../modules/api';
 import fetch from 'isomorphic-fetch'
 
-
-function getDefaultHeaders() {
+function getDefaultHeaders () {
   return {
-    'Accept': 'application/vnd.api+json',
+    'Accept':       'application/vnd.api+json',
     'Content-Type': 'application/vnd.api+json',
   };
 }
 
-function serialize(resource) {
+function serialize (resource) {
   return JSON.stringify(resource);
 }
 
-function handleErrors(response) {
-    const error = new Error(response.statusText);
-    error.response = response;
-    throw error;
+function handleErrors (response) {
+  return {
+    response,
+    failed: true,
+  }
 }
 
-async function handleResponse(response) {
+async function handleResponse (response) {
   const { data, included = [], meta = {} } = await response.json();
 
   if (data) {
     return {
       resources: [...(Array.isArray(data) ? data : [data]), ...included],
-      result: Array.isArray(data) ? data.map((r) => r.id) : data.id,
+      result:    Array.isArray(data) ? data.map((r) => r.id) : data.id,
       meta,
-      status: response.status
+      status:    response.status
     };
   }
 
   return {
     resources: [],
-    result: null,
+    result:    null,
     meta,
-    status: response.status
+    status:    response.status
   };
 }
 
-function createMiddleware(host, defaultHeaders) {
+function createMiddleware (host, defaultHeaders) {
   const getURL = (resources, params, options = {}) => {
     let urlParts = [host];
 
@@ -61,7 +61,7 @@ function createMiddleware(host, defaultHeaders) {
 
     let response = await fetch(url, {
       method,
-      body: ['POST', 'PATCH'].includes(method) ? serialize({ data: resources[resources.length - 1] }) : undefined,
+      body:    ['POST', 'PATCH'].includes(method) ? serialize({ data: resources[resources.length - 1] }) : undefined,
       headers: {
         ...getDefaultHeaders(),
         ...defaultHeaders,
@@ -71,18 +71,18 @@ function createMiddleware(host, defaultHeaders) {
 
     if (response.ok) {
       if (response.status === 204) {
-        return {resources};
+        return { resources };
       }
       return handleResponse(response);
     }
-    handleErrors(response);
+    return handleErrors(response);
 
   };
 
   const requestActions = {
-    [apiActions.GET]: (options) => requestAction('GET', options),
-    [apiActions.POST]: (options) => requestAction('POST', options),
-    [apiActions.PATCH]: (options) => requestAction('PATCH', options),
+    [apiActions.GET]:    (options) => requestAction('GET', options),
+    [apiActions.POST]:   (options) => requestAction('POST', options),
+    [apiActions.PATCH]:  (options) => requestAction('PATCH', options),
     [apiActions.DELETE]: (options) => requestAction('DELETE', options),
   };
 
@@ -91,7 +91,15 @@ function createMiddleware(host, defaultHeaders) {
       next(action);
 
       const data = await requestActions[action.type](action.payload);
-      store.dispatch(apiActions.receive(data.resources, action.type));
+      if (!data.failed) {
+        store.dispatch(apiActions.receive(data.resources, action.type));
+      } else {
+        store.dispatch(apiActions.fail(data.response, action.type));
+        const error = new Error(data.statusText);
+        error.response = data.response;
+        throw error;
+
+      }
       return data;
     }
 
