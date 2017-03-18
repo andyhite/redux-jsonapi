@@ -24,20 +24,22 @@ function handleErrors(response) {
 }
 
 async function handleResponse(response) {
-  const { data, included = [], meta = {} } = await response.json();
+  const { data, included = [], meta = {}, links = {} } = await response.json();
 
   if (data) {
     return {
       resources: [...(Array.isArray(data) ? data : [data]), ...included],
       result: Array.isArray(data) ? data.map((r) => r.id) : data.id,
       meta,
+      links,
     };
   }
 
   return {
     resources: [],
     result: null,
-    meta
+    meta,
+    links,
   };
 }
 
