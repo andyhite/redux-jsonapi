@@ -172,16 +172,16 @@ store.dispatch(apiActions.write(widget));
 
 ## Changing Invocation endpoint other than the type
 
-You can change the invocation endpoint to not use the `type` by adding
+You can change the invocation endpoint to not use the `type` by adding the following to your attributes payload :-
 
 ```js
 meta : {
   invocation: 'what-end-point-you-like'
 }
 
-Because we realize there will be time you send to an endpoint that could expect a different type.  Or how about your type is `singular` but your endpoint is `plural` form ?
-
 ```
+
+Because we realize there will be time you send to an endpoint that could expect a different type.  Or how about your type is `singular` but your endpoint is `plural` form ?
 
 ## Example
 
