@@ -73,7 +73,7 @@ describe('Middleware', () => {
 
       it('returns a promise with the data', async () => {
         const data = await store.dispatch(action);
-        expect(data).toEqual({ resources: [article], result: article.id, meta: {} });
+        expect(data).toEqual({ resources: [article], result: article.id, meta: {}, links: {} });
       });
     });
 
