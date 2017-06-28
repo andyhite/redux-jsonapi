@@ -51,6 +51,11 @@ var request = function request(method, resources, _ref) {
   };
 };
 
+var prepareResourcesByPass = function prepareResourcesByPass(resources) {
+  if (Array.isArray(resources)) return resources;
+  return [resources];
+};
+
 var prepareResources = function prepareResources(resources) {
   if (Array.isArray(resources)) return resources.map(function (resource) {
     return (0, _serializers.serialize)(resource);
@@ -72,7 +77,10 @@ var read = exports.read = function read(resources) {
 var write = exports.write = function write(resources) {
   var payload = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-  return request(dataResource(resources).hasOwnProperty('id') ? PATCH : POST, prepareResources(resources), payload);
+  // bypassPrepareResources flag allows you to by pass prepareResources
+  var _resources = resources.meta && resources.meta.bypassPrepareResources ? prepareResourcesByPass(resources) : prepareResources(resources);
+
+  return request(dataResource(resources).hasOwnProperty('id') ? PATCH : POST, _resources, payload);
 };
 
 var remove = exports.remove = function remove(resources) {

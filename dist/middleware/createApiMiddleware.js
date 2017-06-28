@@ -127,7 +127,16 @@ function createMiddleware(host, defaultHeaders) {
     resources.forEach(function (resource) {
       var resourceAttributes = resource.attributes;
 
-      if (resourceAttributes && resourceAttributes.meta && resourceAttributes.meta.invocation) {
+      var _meta = {};
+
+      // normalize of meta data
+      if (resource.meta) {
+        _meta = resource.meta;
+      } else if (resourceAttributes && resourceAttributes.meta) {
+        _meta = resourceAttributes.meta;
+      }
+
+      if (_meta.invocation) {
         urlParts = [].concat((0, _toConsumableArray3.default)(urlParts), ['/', (0, _humps.decamelize)(resourceAttributes.meta.invocation)]);
         delete resourceAttributes.meta;
       } else if (resource.type) {
