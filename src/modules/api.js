@@ -18,6 +18,11 @@ const request = (method, resources, { meta = {}, ...payload }) => {
   };
 };
 
+const prepareResourcesByPass = (resources) => {
+  if (Array.isArray(resources)) return resources
+  return [resources];
+};
+
 const prepareResources = (resources) => {
   if (Array.isArray(resources)) return resources.map((resource) => serialize(resource));
   return [serialize(resources)];
@@ -33,7 +38,10 @@ export const read = (resources, payload = {}) => {
 };
 
 export const write = (resources, payload = {}) => {
-  return request(dataResource(resources).hasOwnProperty('id') ? PATCH : POST, prepareResources(resources), payload);
+  // bypassPrepareResources flag allows you to by pass prepareResources
+  const _resources  = resources.meta && resources.meta.bypassPrepareResources ? prepareResourcesByPass(resources) : prepareResources(resources)
+
+  return request(dataResource(resources).hasOwnProperty('id') ? PATCH : POST, _resources, payload);
 };
 
 export const remove = (resources, payload = {}) => {

@@ -48,7 +48,24 @@ function createMiddleware(host, defaultHeaders) {
     let urlParts = [host];
 
     resources.forEach((resource) => {
-      if (resource.type) urlParts = [...urlParts, '/', decamelize(resource.type)];
+      const resourceAttributes = resource.attributes
+
+      var _meta = {}
+
+      // normalize of meta data
+      if(resource.meta) {
+        _meta = resource.meta
+      } else if(resourceAttributes && resourceAttributes.meta) {
+        _meta = resourceAttributes.meta
+      }
+
+      if (_meta.invocation) {
+        urlParts = [...urlParts, '/', decamelize(resourceAttributes.meta.invocation)]
+        delete resourceAttributes.meta
+      } else if (resource.type){
+        urlParts = [...urlParts, '/', decamelize(resource.type)]
+      }
+
       if (resource.id) urlParts = [...urlParts, '/', resource.id];
     });
 
